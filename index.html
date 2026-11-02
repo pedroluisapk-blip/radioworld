@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+ <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <title>Radio World</title>
+ <style>
+ body {
+ margin: 0;
+ font-family: Arial, sans-serif;
+ background: #101827;
+ color: white;
+ text-align: center;
+ }
+
+ header {
+ padding: 35px 20px;
+ background: linear-gradient(135deg, #5b21b6, #2563eb);
+ }
+
+ h1 {
+ margin: 0 0 10px;
+ font-size: 42px;
+ }
+
+ header p {
+ margin: 0;
+ font-size: 18px;
+ }
+
+ main {
+ max-width: 900px;
+ margin: auto;
+ padding: 25px 15px;
+ }
+
+ input, select {
+ width: 90%;
+ max-width: 500px;
+ padding: 14px;
+ margin: 8px;
+ border: 0;
+ border-radius: 8px;
+ font-size: 16px;
+ }
+
+.radios {
+ display: grid;
+ grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+ gap: 15px;
+ margin-top: 25px;
+ }
+
+.radio {
+ background: #1f2937;
+ padding: 20px;
+ border-radius: 12px;
+ box-shadow: 0 4px 12px #0005;
+ }
+
+ button {
+ padding: 10px 16px;
+ margin-top: 12px;
+ border: 0;
+ border-radius: 7px;
+ background: #2563eb;
+ color: white;
+ cursor: pointer;
+ font-size: 15px;
+ }
+
+ button:hover {
+ background: #1d4ed8;
+ }
+
+ audio {
+ width: 100%;
+ margin-top: 12px;
+ }
+ </style>
+</head>
+<body>
+ <header>
+ <h1>📻 Radio World</h1>
+ <p>Escucha emisoras de todo el mundo</p>
+ </header>
+
+ <main>
+ <input id="search" type="text" placeholder="Buscar emisora...">
+
+ <select id="country">
+ <option value="all">Todos los países</option>
+ <option value="España">España</option>
+ <option value="México">México</option>
+ <option value="Argentina">Argentina</option>
+ <option value="Estados Unidos">Estados Unidos</option>
+ </select>
+
+ <section class="radios" id="radioList"></section>
+ </main>
+
+ <script>
+ const radios = [
+ {
+ name: "Radio España",
+ country: "España",
+ stream: "https://stream.zeno.fm/0r0xa792kwzuv"
+ },
+ {
+ name: "Radio México",
+ country: "México",
+ stream: "https://stream.zeno.fm/4ywd8f4y8rhvv"
+ },
+ {
+ name: "Radio Argentina",
+ country: "Argentina",
+ stream: "https://stream.zeno.fm/6bq4v5d4p48uv"
+ },
+ {
+ name: "Radio USA",
+ country: "Estados Unidos",
+ stream: "https://stream.zeno.fm/5f3w3n2f3nhvv"
+ }
+ ];
+
+ const radioList = document.getElementById("radioList");
+ const search = document.getElementById("search");
+ const country = document.getElementById("country");
+
+ function showRadios() {
+ const text = search.value.toLowerCase();
+ const selectedCountry = country.value;
+
+ const filtered = radios.filter(radio =>
+ radio.name.toLowerCase().includes(text) &&
+ (selectedCountry === "all" || radio.country === selectedCountry)
+ );
+
+ radioList.innerHTML = filtered.map(radio => `
+ <article class="radio">
+ <h2>${radio.name}</h2>
+ <p>🌎 ${radio.country}</p>
+ <audio controls src="${radio.stream}"></audio>
+ </article>
+ `).join("");
+
+ if (filtered.length === 0) {
+ radioList.innerHTML = "<p>No se encontraron emisoras.</p>";
+ }
+ }
+
+ search.addEventListener("input", showRadios);
+ country.addEventListener("change", showRadios);
+
+ showRadios();
+ </script>
+</body>
+</html>
